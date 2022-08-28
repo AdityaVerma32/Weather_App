@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+// ignore: camel_case_types
 class worker {
   worker({this.location}) {
+    // ignore: unnecessary_this
     location = this.location;
   }
 
@@ -13,6 +15,7 @@ class worker {
   String? air_speed;
   String? Desc;
   String? main_desc;
+  String? icon;
 
   //METHOD= ALL THE DETAILS
   Future<void> getData() async {
@@ -33,25 +36,26 @@ class worker {
       Map weather_main_data = weather_data[0];
       String getDesc = weather_main_data["description"];
       String getmain_desc = weather_main_data["main"];
+      String ico = weather_main_data["icon"];
 
       //getting wind information
       Map wind_info = data["wind"];
       double getair_speed = wind_info["speed"];
 
-      //assigning values
+      //converting to string
       temp = gettemp.toString();
       humidity = gethumidity.toString();
       Desc = getDesc;
       main_desc = getmain_desc;
       air_speed = getair_speed.toString();
+      icon = ico.toString();
     } catch (e) {
       temp = "Error Occured";
       humidity = "Error Occured";
       Desc = "Error Occured";
       main_desc = "Error Occured";
       air_speed = "Error Occured";
+      icon = "03n";
     }
   }
 }
-
-worker instance = worker(location: "deoband");

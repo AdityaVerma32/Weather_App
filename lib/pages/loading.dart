@@ -15,6 +15,8 @@ class _LoadingState extends State<Loading> {
   String? air_speed;
   String? desc;
   String? main_desc;
+  String? icon;
+  String? location;
 
   void start() async {
     worker instance = worker(location: "Deoband");
@@ -25,21 +27,26 @@ class _LoadingState extends State<Loading> {
     air_speed = instance.air_speed;
     desc = instance.Desc;
     main_desc = instance.main_desc;
+    icon = instance.icon;
+    location = instance.location;
 
     Navigator.pushReplacementNamed(context, "/home", arguments: {
       "temp_value": temp,
       "hum_value": humidity,
       "air_value": air_speed,
       "desc_value": desc,
-      "main_value": main_desc
+      "main_value": main_desc,
+      "icon_val": icon,
+      "location_val": location
     });
   }
 
   @override
   void initState() {
     // TODO: implement initState
-    start();
     super.initState();
+    Future.delayed(Duration(seconds: 20));
+    start();
   }
 
   @override

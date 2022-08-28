@@ -12,7 +12,15 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    Map info = ModalRoute.of(context)!.settings.arguments as Map;
+    Map? info = ModalRoute.of(context)?.settings.arguments as Map;
+
+    var temp = info["temp_value"];
+    var hum = info["hum_value"];
+    var air = info["air_value"];
+    var desc = info["desc_value"];
+    var Main = info["main_value"];
+    var icon = info["icon_val"];
+    var location = info["locatin_val"];
 
     List city_names = [
       "Delhi",
@@ -34,33 +42,35 @@ class _HomeState extends State<Home> {
       //       backgroundColor: Colors.red,
       //     )),
       resizeToAvoidBottomInset: false,
-      body: SafeArea(
-          child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          Colors.blue,
-          Color.fromARGB(255, 154, 214, 241),
-        ], stops: [
-          0.1,
-          0.9,
-        ], begin: Alignment.centerLeft, end: Alignment.centerRight)),
-        child: Column(
-          children: <Widget>[
-            search_container(city),
-            first_container(),
-            temperature_row(),
-            two_containers(),
-            sized_Box(15.0, 0.0),
-            const Text(
-              "Made By Aditya Verma",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-            ),
-            sized_Box(10.0, 0.0),
-            const Text(
-              "Data Taken From OpenWeather",
-              style: TextStyle(fontSize: 15),
-            )
-          ],
+      body: SingleChildScrollView(
+          child: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(colors: [
+            Colors.blue,
+            Color.fromARGB(255, 154, 214, 241),
+          ], stops: [
+            0.1,
+            0.9,
+          ], begin: Alignment.centerLeft, end: Alignment.centerRight)),
+          child: Column(
+            children: <Widget>[
+              search_container(city),
+              first_container(icon, location),
+              temperature_row(temp),
+              two_containers(air, hum),
+              sized_Box(15.0, 0.0),
+              const Text(
+                "Made By Aditya Verma",
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              ),
+              sized_Box(10.0, 0.0),
+              const Text(
+                "Data Taken From OpenWeather",
+                style: TextStyle(fontSize: 15),
+              )
+            ],
+          ),
         ),
       )),
     );
@@ -97,7 +107,7 @@ Container search_container(var city) {
   );
 }
 
-Row first_container() {
+Row first_container(var icon, var location) {
   return Row(
     children: [
       Expanded(
@@ -109,20 +119,17 @@ Row first_container() {
             padding: EdgeInsets.all(15),
             child: Row(
               children: [
-                const Icon(
-                  Icons.home_max_outlined,
-                  size: 40,
-                ),
+                Image.network("http://openweathermap.org/img/wn/$icon@2x.png"),
                 sized_Box(0.0, 20.0),
                 Column(
                   //First block
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       "Scattered Clouds",
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    Text("In Deoband")
+                    Text("In $location")
                   ],
                 )
               ],
@@ -132,7 +139,7 @@ Row first_container() {
   );
 }
 
-Row temperature_row() {
+Row temperature_row(var temp) {
   return Row(
     children: [
       Expanded(
@@ -156,7 +163,7 @@ Row temperature_row() {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "32",
+                    "$temp",
                     style: TextStyle(fontSize: 90),
                   ),
                   Text(
@@ -173,7 +180,7 @@ Row temperature_row() {
   );
 }
 
-Row two_containers() {
+Row two_containers(var air, var hum) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: <Widget>[
@@ -197,7 +204,7 @@ Row two_containers() {
             ),
             sized_Box(20.0, 0.0),
             Text(
-              "20.9",
+              "$air",
               style: TextStyle(fontSize: 40),
             ),
             Text("Km/h"),
@@ -223,7 +230,7 @@ Row two_containers() {
             ),
             sized_Box(20.0, 0.0),
             Text(
-              "66",
+              "$hum",
               style: TextStyle(fontSize: 40),
             ),
             Text("Percent"),
